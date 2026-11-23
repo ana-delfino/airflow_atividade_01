@@ -1,0 +1,154 @@
+# ShopBrasil - Pipeline de preços por categoria (Apache Airflow)
+#
+# Serviços:
+#   postgres           -> banco de METADADOS do Airflow (sem porta publicada)
+#   postgres_dw        -> base ANALÍTICA (onde o pipeline grava as métricas)
+#   airflow-init       -> migra o banco, cria usuário admin, pool e connection
+#   airflow-webserver  -> UI em http://localhost:${AIRFLOW_WEB_PORT}
+#   airflow-scheduler  -> agenda e executa as tasks (LocalExecutor)
+#
+# Todas as configurações ficam no .env (veja .env.example). Os valores
+# padrão abaixo (${VAR:-padrão}) permitem subir o projeto mesmo sem ele.
+
+x-airflow-common: &airflow-common
+  image: ${AIRFLOW_IMAGE:-apache/airflow}:${AIRFLOW_VERSION:-2.10.5-python3.11}
+  environment: &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://${AIRFLOW_DB_USER:-airflow}:${AIRFLOW_DB_PASSWORD:-airflow}@postgres/${AIRFLOW_DB_NAME:-airflow}
+    AIRFLOW__CORE__FERNET_KEY: ${AIRFLOW_FERNET_KEY:-07RuqMx-FLTKKII8Ob16t9Q6MlrsTdetHnD5LYIXe_k=}
+    AIRFLOW__WEBSERVER__SECRET_KEY: ${AIRFLOW_SECRET_KEY:-wA9kY3Zu-IdXY-iNrCHAJogkWtA_KejpMLMGb3796GI}
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__CORE__DEFAULT_TIMEZONE: America/Sao_Paulo
+    AIRFLOW__WEBSERVER__DEFAULT_UI_TIMEZONE: America/Sao_Paulo
+    AIRFLOW__SCHEDULER__ENABLE_HEALTH_CHECK: "true"
+    AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth,airflow.api.auth.backend.session
+    # Configurações do pipeline
+    FAKESTORE_API_URL: ${FAKESTORE_API_URL:-https://fakestoreapi.com}
+    ALERT_WEBHOOK_URL: ${ALERT_WEBHOOK_URL:-}
+  volumes:
+    # Código e configuração montados como somente leitura; só os logs são graváveis.
+    - ./dags:/opt/airflow/dags:ro
+    - ./plugins:/opt/airflow/plugins:ro
+    - ./config:/opt/airflow/config:ro
+    - ./logs:/opt/airflow/logs
+  user: "${AIRFLOW_UID:-50000}:0"
+  networks:
+    - airflow-net
+    - dw-net
+  depends_on: &airflow-common-depends-on
+    postgres:
+      condition: service_healthy
+    postgres_dw:
+      condition: service_healthy
+
+services:
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-16}
+    environment:
+      POSTGRES_USER: ${AIRFLOW_DB_USER:-airflow}
+      POSTGRES_PASSWORD: ${AIRFLOW_DB_PASSWORD:-airflow}
+      POSTGRES_DB: ${AIRFLOW_DB_NAME:-airflow}
+    volumes:
+      - postgres-airflow-data:/var/lib/postgresql/data
+    networks:
+      - airflow-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+  postgres_dw:
+    image: postgres:${POSTGRES_VERSION:-16}
+    environment:
+      POSTGRES_USER: ${DW_USER:-dw}
+      POSTGRES_PASSWORD: ${DW_PASSWORD:-senha_analitica_local}
+      POSTGRES_DB: ${DW_DB:-shopbrasil_dw}
+    ports:
+      - "${DW_PORT:-5454}:5432"
+    volumes:
+      - postgres-dw-data:/var/lib/postgresql/data
+    networks:
+      - dw-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+    restart: unless-stopped
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    environment:
+      <<: *airflow-common-env
+      _ADMIN_USER: ${AIRFLOW_ADMIN_USER:-admin}
+      _ADMIN_PASSWORD: ${AIRFLOW_ADMIN_PASSWORD:-admin}
+      _DW_USER: ${DW_USER:-dw}
+      _DW_PASSWORD: ${DW_PASSWORD:-senha_analitica_local}
+      _DW_DB: ${DW_DB:-shopbrasil_dw}
+    command:
+      - -c
+      - |
+        set -e
+        airflow db migrate
+        airflow users create \
+          --username "$${_ADMIN_USER}" --password "$${_ADMIN_PASSWORD}" \
+          --firstname Admin --lastname ShopBrasil \
+          --role Admin --email admin@shopbrasil.local || true
+        # Pool que limita a concorrência das tasks mapeadas por categoria
+        airflow pools set ecommerce_pool 2 "Limita a concorrencia das metricas por categoria"
+        # Connection do Airflow para a base analítica (senha criptografada com a Fernet key)
+        airflow connections delete postgres_dw || true
+        airflow connections add postgres_dw \
+          --conn-type postgres \
+          --conn-host postgres_dw \
+          --conn-port 5432 \
+          --conn-schema "$${_DW_DB}" \
+          --conn-login "$${_DW_USER}" \
+          --conn-password "$${_DW_PASSWORD}"
+        echo "Inicializacao concluida."
+    restart: "no"
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "${AIRFLOW_WEB_PORT:-8085}:8080"
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8974/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+    restart: unless-stopped
+    depends_on:
+      <<: *airflow-common-depends-on
+      airflow-init:
+        condition: service_completed_successfully
+
+networks:
+  airflow-net:
+    name: shopbrasil-airflow-net
+  dw-net:
+    name: shopbrasil-dw-net
+
+volumes:
+  postgres-airflow-data:
+  postgres-dw-data:

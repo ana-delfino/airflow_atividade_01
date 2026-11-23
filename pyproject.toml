@@ -1,0 +1,57 @@
+[project]
+name = "shopbrasil-pipeline-precos"
+version = "1.0.0"
+description = "Pipeline Airflow de métricas de preço por categoria (ShopBrasil)"
+requires-python = ">=3.11"
+
+# ---------------------------------------------------------------------------
+# Padrão de código: ruff (lint + formatação). Veja a seção "Padrão de código" do README.
+#   ruff check .           -> aponta problemas
+#   ruff check --fix .     -> corrige o que for automático
+#   ruff format .          -> formata
+# ---------------------------------------------------------------------------
+[tool.ruff]
+line-length = 110
+target-version = "py311"
+src = ["dags", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W",  # pycodestyle (PEP 8)
+    "F",       # pyflakes: imports/variáveis não usados, nomes indefinidos
+    "I",       # isort: ordem dos imports
+    "N",       # pep8-naming: snake_case, PascalCase, CONSTANTES
+    "UP",      # pyupgrade: sintaxe moderna do Python 3.11
+    "B",       # flake8-bugbear: armadilhas comuns
+    "ISC",     # strings coladas sem querer ("a" "b"); o aviso de conflito com o formatador é esperado
+    "D",       # pydocstyle: docstrings
+    "ANN",     # type hints obrigatórios nas funções públicas
+    "RUF",     # regras do próprio ruff
+    "AIR",     # boas práticas de Airflow
+]
+ignore = [
+    "D105", "D107",  # docstring em métodos mágicos / __init__ (documentado na classe)
+    "D202",          # linha em branco após docstring (conflita com funções aninhadas da DAG)
+    "ANN401",        # Any é aceito para XComArg e dados vindos da API
+    "RUF001", "RUF002", "RUF003",  # caracteres "ambíguos" em texto em português (→, …)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "ANN"]
+"dags/shopbrasil/callbacks.py" = ["ARG001"]
+"dags/*_dag.py" = ["D415"]  # docstring da DAG é Markdown (doc_md) e começa com um título
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["shopbrasil"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+# ---------------------------------------------------------------------------
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["dags"]
+addopts = "-q"
