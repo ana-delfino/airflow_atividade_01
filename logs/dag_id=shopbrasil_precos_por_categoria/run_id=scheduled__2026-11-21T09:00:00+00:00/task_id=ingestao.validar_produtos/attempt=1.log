@@ -1,0 +1,34 @@
+[2026-11-22T23:03:39.409+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-11-22T23:03:39.427+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: shopbrasil_precos_por_categoria.ingestao.validar_produtos scheduled__2026-11-21T09:00:00+00:00 [queued]>
+[2026-11-22T23:03:39.432+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: shopbrasil_precos_por_categoria.ingestao.validar_produtos scheduled__2026-11-21T09:00:00+00:00 [queued]>
+[2026-11-22T23:03:39.433+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 2
+[2026-11-22T23:03:39.439+0000] {taskinstance.py:2890} INFO - Executing <Task(ValidarProdutosOperator): ingestao.validar_produtos> on 2026-11-21 09:00:00+00:00
+[2026-11-22T23:03:39.443+0000] {standard_task_runner.py:72} INFO - Started process 209 to run task
+[2026-11-22T23:03:39.446+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'shopbrasil_precos_por_categoria', 'ingestao.validar_produtos', 'scheduled__2026-11-21T09:00:00+00:00', '--job-id', '4', '--raw', '--subdir', 'DAGS_FOLDER/shopbrasil_precos_dag.py', '--cfg-path', '/tmp/tmpm4z79vkj']
+[2026-11-22T23:03:39.447+0000] {standard_task_runner.py:105} INFO - Job 4: Subtask ingestao.validar_produtos
+[2026-11-22T23:03:39.488+0000] {task_command.py:467} INFO - Running <TaskInstance: shopbrasil_precos_por_categoria.ingestao.validar_produtos scheduled__2026-11-21T09:00:00+00:00 [running]> on host b2ff7d3f5ab0
+[2026-11-22T23:03:39.557+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='time-dados' AIRFLOW_CTX_DAG_ID='shopbrasil_precos_por_categoria' AIRFLOW_CTX_TASK_ID='ingestao.validar_produtos' AIRFLOW_CTX_EXECUTION_DATE='2026-11-21T09:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-11-21T09:00:00+00:00'
+[2026-11-22T23:03:39.558+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2026-11-22T23:03:39.559+0000] {operators.py:50} INFO - Validação: 20 válidos, 0 inválidos (0.0%)
+[2026-11-22T23:03:39.579+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2026-11-22T23:03:39.579+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=shopbrasil_precos_por_categoria, task_id=ingestao.validar_produtos, run_id=scheduled__2026-11-21T09:00:00+00:00, execution_date=20261121T090000, start_date=20261122T230339, end_date=20261122T230339
+[2026-11-22T23:03:39.620+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-11-22T23:03:39.643+0000] {taskinstance.py:3901} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-11-22T23:03:39.644+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
+[2026-11-22T23:21:11.957+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-11-22T23:21:11.976+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: shopbrasil_precos_por_categoria.ingestao.validar_produtos scheduled__2026-11-21T09:00:00+00:00 [queued]>
+[2026-11-22T23:21:11.982+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: shopbrasil_precos_por_categoria.ingestao.validar_produtos scheduled__2026-11-21T09:00:00+00:00 [queued]>
+[2026-11-22T23:21:11.982+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 2
+[2026-11-22T23:21:11.988+0000] {taskinstance.py:2890} INFO - Executing <Task(ValidarProdutosOperator): ingestao.validar_produtos> on 2026-11-21 09:00:00+00:00
+[2026-11-22T23:21:11.992+0000] {standard_task_runner.py:72} INFO - Started process 173 to run task
+[2026-11-22T23:21:11.996+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'shopbrasil_precos_por_categoria', 'ingestao.validar_produtos', 'scheduled__2026-11-21T09:00:00+00:00', '--job-id', '3', '--raw', '--subdir', 'DAGS_FOLDER/shopbrasil_precos_dag.py', '--cfg-path', '/tmp/tmp1p8d6e9m']
+[2026-11-22T23:21:11.997+0000] {standard_task_runner.py:105} INFO - Job 3: Subtask ingestao.validar_produtos
+[2026-11-22T23:21:12.054+0000] {task_command.py:467} INFO - Running <TaskInstance: shopbrasil_precos_por_categoria.ingestao.validar_produtos scheduled__2026-11-21T09:00:00+00:00 [running]> on host d24cb196fda7
+[2026-11-22T23:21:12.135+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='time-dados' AIRFLOW_CTX_DAG_ID='shopbrasil_precos_por_categoria' AIRFLOW_CTX_TASK_ID='ingestao.validar_produtos' AIRFLOW_CTX_EXECUTION_DATE='2026-11-21T09:00:00+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='scheduled__2026-11-21T09:00:00+00:00'
+[2026-11-22T23:21:12.136+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2026-11-22T23:21:12.138+0000] {operators.py:50} INFO - Validação: 20 válidos, 0 inválidos (0.0%)
+[2026-11-22T23:21:12.158+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2026-11-22T23:21:12.159+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=shopbrasil_precos_por_categoria, task_id=ingestao.validar_produtos, run_id=scheduled__2026-11-21T09:00:00+00:00, execution_date=20261121T090000, start_date=20261122T232111, end_date=20261122T232112
+[2026-11-22T23:21:12.208+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-11-22T23:21:12.233+0000] {taskinstance.py:3901} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2026-11-22T23:21:12.235+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

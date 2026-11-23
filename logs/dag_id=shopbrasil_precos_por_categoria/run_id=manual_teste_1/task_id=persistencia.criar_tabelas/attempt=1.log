@@ -1,0 +1,57 @@
+[2026-11-22T23:03:46.317+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2026-11-22T23:03:46.330+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: shopbrasil_precos_por_categoria.persistencia.criar_tabelas manual_teste_1 [queued]>
+[2026-11-22T23:03:46.335+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: shopbrasil_precos_por_categoria.persistencia.criar_tabelas manual_teste_1 [queued]>
+[2026-11-22T23:03:46.336+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 2
+[2026-11-22T23:03:46.342+0000] {taskinstance.py:2890} INFO - Executing <Task(_PythonDecoratedOperator): persistencia.criar_tabelas> on 2026-11-22 23:03:38+00:00
+[2026-11-22T23:03:46.347+0000] {standard_task_runner.py:72} INFO - Started process 237 to run task
+[2026-11-22T23:03:46.351+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'shopbrasil_precos_por_categoria', 'persistencia.criar_tabelas', 'manual_teste_1', '--job-id', '13', '--raw', '--subdir', 'DAGS_FOLDER/shopbrasil_precos_dag.py', '--cfg-path', '/tmp/tmpznkwss0l']
+[2026-11-22T23:03:46.353+0000] {standard_task_runner.py:105} INFO - Job 13: Subtask persistencia.criar_tabelas
+[2026-11-22T23:03:46.402+0000] {task_command.py:467} INFO - Running <TaskInstance: shopbrasil_precos_por_categoria.persistencia.criar_tabelas manual_teste_1 [running]> on host b2ff7d3f5ab0
+[2026-11-22T23:03:46.470+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='time-dados' AIRFLOW_CTX_DAG_ID='shopbrasil_precos_por_categoria' AIRFLOW_CTX_TASK_ID='persistencia.criar_tabelas' AIRFLOW_CTX_EXECUTION_DATE='2026-11-22T23:03:38+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual_teste_1'
+[2026-11-22T23:03:46.471+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2026-11-22T23:03:46.483+0000] {base.py:84} INFO - Retrieving connection 'postgres_***'
+[2026-11-22T23:03:46.491+0000] {sql.py:511} INFO - Running statement: 
+-- Snapshot idempotente: 1 linha por (dia de referência, categoria).
+CREATE TABLE IF NOT EXISTS metricas_categoria (
+    data_referencia DATE          NOT NULL,
+    categoria       TEXT          NOT NULL,
+    preco_medio     NUMERIC(12,2) NOT NULL,
+    preco_minimo    NUMERIC(12,2) NOT NULL,
+    preco_maximo    NUMERIC(12,2) NOT NULL,
+    qtd_produtos    INTEGER       NOT NULL,
+    run_id          TEXT          NOT NULL,
+    atualizado_em   TIMESTAMPTZ   NOT NULL DEFAULT now(),
+    CONSTRAINT pk_metricas_categoria PRIMARY KEY (data_referencia, categoria)
+);
+
+-- Histórico em modo append: cada execução acrescenta linhas.
+CREATE TABLE IF NOT EXISTS metricas_categoria_historico (
+    id              BIGSERIAL     PRIMARY KEY,
+    data_execucao   TIMESTAMPTZ   NOT NULL,
+    data_referencia DATE          NOT NULL,
+    categoria       TEXT          NOT NULL,
+    preco_medio     NUMERIC(12,2) NOT NULL,
+    preco_minimo    NUMERIC(12,2) NOT NULL,
+    preco_maximo    NUMERIC(12,2) NOT NULL,
+    qtd_produtos    INTEGER       NOT NULL,
+    run_id          TEXT          NOT NULL,
+    try_number      INTEGER       NOT NULL,
+    inserido_em     TIMESTAMPTZ   NOT NULL DEFAULT now()
+);
+CREATE INDEX IF NOT EXISTS ix_historico_categoria_data
+    ON metricas_categoria_historico (categoria, data_referencia);
+
+-- Visão consumida pelo painel: sempre o dia mais recente.
+CREATE OR REPLACE VIEW vw_painel_precos AS
+SELECT data_referencia, categoria, preco_medio, preco_minimo, preco_maximo, qtd_produtos, atualizado_em
+FROM metricas_categoria
+WHERE data_referencia = (SELECT max(data_referencia) FROM metricas_categoria)
+ORDER BY categoria;
+, parameters: None
+[2026-11-22T23:03:46.495+0000] {db.py:75} INFO - Tabelas e view garantidas na base analítica.
+[2026-11-22T23:03:46.495+0000] {python.py:240} INFO - Done. Returned value was: None
+[2026-11-22T23:03:46.505+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2026-11-22T23:03:46.506+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=shopbrasil_precos_por_categoria, task_id=persistencia.criar_tabelas, run_id=manual_teste_1, execution_date=20261122T230338, start_date=20261122T230346, end_date=20261122T230346
+[2026-11-22T23:03:46.564+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2026-11-22T23:03:46.592+0000] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2026-11-22T23:03:46.593+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
