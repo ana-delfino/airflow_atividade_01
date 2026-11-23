@@ -288,3 +288,31 @@
 [2026-11-23T00:20:07.873+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:20:07.873+0000] {dag.py:3239} INFO - Sync 1 DAGs
 [2026-11-23T00:20:07.898+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:20:07.898+0000] {dag.py:4180} INFO - Setting next_dagrun for shopbrasil_precos_por_categoria to 2026-11-22 09:00:00+00:00, run_after=2026-11-23 09:00:00+00:00
 [2026-11-23T00:20:07.910+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/shopbrasil_precos_dag.py took 0.175 seconds
+[2026-11-23T00:20:38.215+0000] {processor.py:186} INFO - Started process (PID=1420) to work on /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:20:38.217+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/shopbrasil_precos_dag.py for tasks to queue
+[2026-11-23T00:20:38.220+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:20:38.219+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:20:38.277+0000] {processor.py:925} INFO - DAG(s) 'shopbrasil_precos_por_categoria' retrieved from /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:20:38.320+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:20:38.320+0000] {dag.py:3239} INFO - Sync 1 DAGs
+[2026-11-23T00:20:38.342+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:20:38.342+0000] {dag.py:4180} INFO - Setting next_dagrun for shopbrasil_precos_por_categoria to 2026-11-22 09:00:00+00:00, run_after=2026-11-23 09:00:00+00:00
+[2026-11-23T00:20:38.352+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/shopbrasil_precos_dag.py took 0.148 seconds
+[2026-11-23T00:21:08.675+0000] {processor.py:186} INFO - Started process (PID=1431) to work on /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:21:08.676+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/shopbrasil_precos_dag.py for tasks to queue
+[2026-11-23T00:21:08.680+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:21:08.679+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:21:08.735+0000] {processor.py:925} INFO - DAG(s) 'shopbrasil_precos_por_categoria' retrieved from /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:21:08.778+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:21:08.778+0000] {dag.py:3239} INFO - Sync 1 DAGs
+[2026-11-23T00:21:08.800+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:21:08.799+0000] {dag.py:4180} INFO - Setting next_dagrun for shopbrasil_precos_por_categoria to 2026-11-22 09:00:00+00:00, run_after=2026-11-23 09:00:00+00:00
+[2026-11-23T00:21:08.811+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/shopbrasil_precos_dag.py took 0.147 seconds
+[2026-11-23T00:21:39.111+0000] {processor.py:186} INFO - Started process (PID=1442) to work on /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:21:39.112+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/shopbrasil_precos_dag.py for tasks to queue
+[2026-11-23T00:21:39.116+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:21:39.115+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:21:39.168+0000] {processor.py:925} INFO - DAG(s) 'shopbrasil_precos_por_categoria' retrieved from /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:21:39.211+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:21:39.211+0000] {dag.py:3239} INFO - Sync 1 DAGs
+[2026-11-23T00:21:39.229+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:21:39.229+0000] {dag.py:4180} INFO - Setting next_dagrun for shopbrasil_precos_por_categoria to 2026-11-22 09:00:00+00:00, run_after=2026-11-23 09:00:00+00:00
+[2026-11-23T00:21:39.239+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/shopbrasil_precos_dag.py took 0.139 seconds
+[2026-11-23T00:22:09.492+0000] {processor.py:186} INFO - Started process (PID=1453) to work on /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:22:09.493+0000] {processor.py:914} INFO - Processing file /opt/airflow/dags/shopbrasil_precos_dag.py for tasks to queue
+[2026-11-23T00:22:09.496+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:22:09.495+0000] {dagbag.py:588} INFO - Filling up the DagBag from /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:22:09.547+0000] {processor.py:925} INFO - DAG(s) 'shopbrasil_precos_por_categoria' retrieved from /opt/airflow/dags/shopbrasil_precos_dag.py
+[2026-11-23T00:22:09.591+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:22:09.591+0000] {dag.py:3239} INFO - Sync 1 DAGs
+[2026-11-23T00:22:09.615+0000] {logging_mixin.py:190} INFO - [2026-11-23T00:22:09.615+0000] {dag.py:4180} INFO - Setting next_dagrun for shopbrasil_precos_por_categoria to 2026-11-22 09:00:00+00:00, run_after=2026-11-23 09:00:00+00:00
+[2026-11-23T00:22:09.626+0000] {processor.py:208} INFO - Processing /opt/airflow/dags/shopbrasil_precos_dag.py took 0.151 seconds
