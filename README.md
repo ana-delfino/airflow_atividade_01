@@ -11,6 +11,7 @@ resultado no PostgreSQL, todo dia às **06:00 (horário de Brasília)**.
 git clone https://github.com/ana-delfino/airflow_atividade_01.git
 cd airflow_atividade_01
 cp .env.example .env
+echo "AIRFLOW_UID=$(id -u)" >> .env   # só no Linux, evita erro de permissão em ./logs
 docker compose up -d
 ```
 
@@ -302,9 +303,15 @@ então o projeto sobe mesmo sem ele. Uma variável definida no terminal tem prio
 
 ```bash
 cp .env.example .env
+echo "AIRFLOW_UID=$(id -u)" >> .env   # só no Linux (veja a nota abaixo)
 docker compose up -d
 docker compose ps          # bancos, webserver e scheduler devem ficar (healthy)
 ```
+
+> **Linux:** os containers do Airflow rodam com o UID definido em `AIRFLOW_UID` (padrão `50000`).
+> A pasta `./logs` pertence ao seu usuário, então com o valor padrão o Airflow não consegue gravar
+> os logs e as tasks falham com `PermissionError`. Por isso, no Linux, defina `AIRFLOW_UID` com o seu
+> UID (`id -u`), como no comando acima. No macOS e no Windows (Docker Desktop) isso não é necessário.
 
 Abra **http://localhost:8085** (usuário `admin`, senha `admin`).
 
