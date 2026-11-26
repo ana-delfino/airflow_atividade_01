@@ -1,0 +1,11 @@
+
+!logs/.gitkeep
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.venv/
+.DS_Store
+Atividade 01 - Descrição.pdf
+README copy.md
+logs/
